@@ -16,23 +16,17 @@ const ReactLogo = () => {
   const strokeWidth = 7;
   const color = '#61DAFB';
 
+  //Posição animada
   const offsetX = useSharedValue(150);
   const offsetY = useSharedValue(150);
 
-  // Gesto de toque para atrair o logo até o toque
-  const magneticGesture = Gesture.Tap().onTouchesDown((event) => {
-    const touch = event.allTouches[0];
-    offsetX.value = withTiming(touch.x - center, {
-      duration: 500,
-      easing: Easing.out(Easing.exp),
-    });
-    offsetY.value = withTiming(touch.y - center, {
-      duration: 500,
-      easing: Easing.out(Easing.exp),
-    });
+  //Gesto de arrastar
+  const pan = Gesture.Pan().onChange(event => {
+    offsetX.value += event.changeX;
+    offsetY.value += event.changeY;
   });
 
-  // Animação de brilho do fundo
+  //Animação de brilho do fundo
   const glow = useSharedValue(0.3);
   useEffect(() => {
     glow.value = withRepeat(
@@ -52,18 +46,24 @@ const ReactLogo = () => {
     return `${color}${alpha}`;
   });
 
+  //posição animada para Skia
   const translate = useDerivedValue(() => {
     return [{ translateX: offsetX.value }, { translateY: offsetY.value }];
   });
 
   return (
     <View style={styles.container}>
-      <GestureDetector gesture={magneticGesture}>
+      <GestureDetector gesture={pan}>
         <Canvas style={{ width: size * 2, height: size * 2 }}>
           <Group transform={translate}>
+            {/* Luz de fundo */}
             <Circle cx={center} cy={center} r={90} color={animatedGlowColor} />
 
-            <Group origin={{ x: center, y: center }} transform={[{ rotate: 0 }]}>
+            {/* Elipses */}
+            <Group
+              origin={{ x: center, y: center }}
+              transform={[{ rotate: 0 }]}
+            >
               <Oval
                 width={180}
                 height={60}
@@ -75,7 +75,10 @@ const ReactLogo = () => {
               />
             </Group>
 
-            <Group origin={{ x: center, y: center }} transform={[{ rotate: Math.PI / 3 }]}>
+            <Group
+              origin={{ x: center, y: center }}
+              transform={[{ rotate: Math.PI / 3 }]}
+            >
               <Oval
                 width={180}
                 height={60}
@@ -87,7 +90,10 @@ const ReactLogo = () => {
               />
             </Group>
 
-            <Group origin={{ x: center, y: center }} transform={[{ rotate: -Math.PI / 3 }]}>
+            <Group
+              origin={{ x: center, y: center }}
+              transform={[{ rotate: -Math.PI / 3 }]}
+            >
               <Oval
                 width={180}
                 height={60}
@@ -99,6 +105,7 @@ const ReactLogo = () => {
               />
             </Group>
 
+            {/* Círculo central */}
             <Circle cx={center} cy={center} r={15} color={color} />
           </Group>
         </Canvas>
