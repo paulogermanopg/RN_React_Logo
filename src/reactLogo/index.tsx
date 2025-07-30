@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Canvas, Circle, Oval, Group } from '@shopify/react-native-skia';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import {
   useSharedValue,
   useDerivedValue,
@@ -10,29 +10,38 @@ import {
   Easing,
 } from 'react-native-reanimated';
 
+const { width, height } = Dimensions.get('window');
+
 const ReactLogo = () => {
   const size = 300;
   const center = size / 2;
   const strokeWidth = 7;
   const color = '#61DAFB';
 
-  const offsetX = useSharedValue(150);
-  const offsetY = useSharedValue(150);
+  const centerX = width / 2 - center;
+  const centerY = height / 2 - center;
 
-  // Gesto de toque para atrair o logo até o toque
-  const magneticGesture = Gesture.Tap().onTouchesDown((event) => {
-    const touch = event.allTouches[0];
-    offsetX.value = withTiming(touch.x - center, {
-      duration: 500,
-      easing: Easing.out(Easing.exp),
-    });
-    offsetY.value = withTiming(touch.y - center, {
-      duration: 500,
-      easing: Easing.out(Easing.exp),
-    });
-  });
+  const offsetX = useSharedValue(centerX);
+  const offsetY = useSharedValue(centerY);
 
-  // Animação de brilho do fundo
+  // Gesto de arrasto com efeito magnético ao soltar
+  const panGesture = Gesture.Pan()
+    .onUpdate(e => {
+      offsetX.value = e.absoluteX - center;
+      offsetY.value = e.absoluteY - center;
+    })
+    .onEnd(() => {
+      offsetX.value = withTiming(centerX, {
+        duration: 800,
+        easing: Easing.out(Easing.exp),
+      });
+      offsetY.value = withTiming(centerY, {
+        duration: 800,
+        easing: Easing.out(Easing.exp),
+      });
+    });
+
+  // Animação de brilho
   const glow = useSharedValue(0.3);
   useEffect(() => {
     glow.value = withRepeat(
@@ -58,47 +67,27 @@ const ReactLogo = () => {
 
   return (
     <View style={styles.container}>
-      <GestureDetector gesture={magneticGesture}>
-        <Canvas style={{ width: size * 2, height: size * 2 }}>
+      <GestureDetector gesture={panGesture}>
+        <Canvas style={StyleSheet.absoluteFill}>
           <Group transform={translate}>
             <Circle cx={center} cy={center} r={90} color={animatedGlowColor} />
-
-            <Group origin={{ x: center, y: center }} transform={[{ rotate: 0 }]}>
-              <Oval
-                width={180}
-                height={60}
-                x={center - 90}
-                y={center - 30}
-                color={color}
-                style="stroke"
-                strokeWidth={strokeWidth}
-              />
-            </Group>
-
-            <Group origin={{ x: center, y: center }} transform={[{ rotate: Math.PI / 3 }]}>
-              <Oval
-                width={180}
-                height={60}
-                x={center - 90}
-                y={center - 30}
-                color={color}
-                style="stroke"
-                strokeWidth={strokeWidth}
-              />
-            </Group>
-
-            <Group origin={{ x: center, y: center }} transform={[{ rotate: -Math.PI / 3 }]}>
-              <Oval
-                width={180}
-                height={60}
-                x={center - 90}
-                y={center - 30}
-                color={color}
-                style="stroke"
-                strokeWidth={strokeWidth}
-              />
-            </Group>
-
+            {[0, Math.PI / 3, -Math.PI / 3].map((angle, index) => (
+              <Group
+                key={index}
+                origin={{ x: center, y: center }}
+                transform={[{ rotate: angle }]}
+              >
+                <Oval
+                  width={180}
+                  height={60}
+                  x={center - 90}
+                  y={center - 30}
+                  color={color}
+                  style="stroke"
+                  strokeWidth={strokeWidth}
+                />
+              </Group>
+            ))}
             <Circle cx={center} cy={center} r={15} color={color} />
           </Group>
         </Canvas>
@@ -111,8 +100,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 
