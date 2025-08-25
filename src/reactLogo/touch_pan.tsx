@@ -58,8 +58,7 @@ const ReactLogo = () => {
           <Group transform={translate}>
             {/* Luz de fundo */}
             <Circle cx={center} cy={center} r={90} color={animatedGlowColor} />
-
-            {/* Elipses */}
+            
             <Group
               origin={{ x: center, y: center }}
               transform={[{ rotate: 0 }]}

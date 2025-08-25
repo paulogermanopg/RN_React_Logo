@@ -41,7 +41,7 @@ const ReactLogo = () => {
       });
     });
 
-  // Animação de brilho
+  // Animação do brilho
   const glow = useSharedValue(0.3);
   useEffect(() => {
     glow.value = withRepeat(
@@ -61,6 +61,7 @@ const ReactLogo = () => {
     return `${color}${alpha}`;
   });
 
+  // Translate para os gestos
   const translate = useDerivedValue(() => {
     return [{ translateX: offsetX.value }, { translateY: offsetY.value }];
   });
