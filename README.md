@@ -46,12 +46,12 @@ Neste projeto, foi realizado a criação de um desenho semelhante ao logo do Rea
     ```
 
   ## Para mais detalhes acesse meu vídeo tutorial em:
-   [Tutorial em vídeo Parte 01](https://www.youtube.com/watch?v=Ko15MtuEEzY) 
+   [Tutorial em vídeo Parte 01](https://www.youtube.com/watch?v=s_TPoIVXt-g) 
  
-   [Tutorial em vídeo Parte 02](https://www.youtube.com/watch?v=qzEqB53eYyY)
+   [Tutorial em vídeo Parte 02](https://www.youtube.com/watch?v=KiIwfFdw2ag) 
 
-   [Tutorial em vídeo Parte 03](https://www.youtube.com/watch?v=OBysqn5N0U4)
- 
+   [Tutorial em vídeo Parte 03](https://www.youtube.com/watch?v=QDDOcrbbu60) 
+  
 ## Prévia
 <p align="center">
   <img src="vidgif01.gif" width="250" />
