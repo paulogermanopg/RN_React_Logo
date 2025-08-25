@@ -9,6 +9,7 @@ Neste projeto, foi realizado a criação de um desenho semelhante ao logo do Rea
 1. Com a Versão do node v20.17.0 instalada vamos instalar as bibliotecas essenciais para o projeto:
    - `npm install @shopify/react-native-skia@1.11.2`
    - `npm install react-native-reanimated`
+   - - `react-native-gesture-handler`
 
 2. Adicione o plugin do Reanimated no Babel.config.js
    ```jsx
